@@ -11,6 +11,7 @@ const speed = 10; // Speed of movement in both X and Y directions
 let dx = speed; // Change in X position
 let dy = speed; // Change in Y position
 
+
 // Resize the canvas to full page
 function resizeCanvas() {
   canvas.width = window.innerWidth;
@@ -30,7 +31,19 @@ function draw() {
   ctx.lineWidth = 5;
   ctx.strokeStyle = "green";
   ctx.stroke();
+  moveCircle();
+  // Call draw again for the next frame
+  requestAnimationFrame(draw);
+}
 
+// Initialize the canvas size and start the animation
+resizeCanvas();
+draw();
+
+// Update canvas size when the window is resized
+window.addEventListener("resize", resizeCanvas);
+
+function moveCircle() {
   // Update circle's position
   x += dx;
   y += dy;
@@ -43,14 +56,6 @@ function draw() {
   if (y + radius > canvas.height || y - radius < 0) {
     dy = -dy; // Reverse Y direction
   }
-
-  // Call draw again for the next frame
-  requestAnimationFrame(draw);
 }
 
-// Initialize the canvas size and start the animation
-resizeCanvas();
-draw();
 
-// Update canvas size when the window is resized
-window.addEventListener("resize", resizeCanvas);

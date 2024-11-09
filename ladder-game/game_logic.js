@@ -1,7 +1,9 @@
 console.log("game logic got connected");
+import { redBallState, greenBallState } from "./gameState.js";
 
 const canvas = document.getElementById("ladder_game_canvas");
 const ctx = canvas.getContext("2d");
+const moveBallBtn = document.getElementById("move_ball");
 
 canvas.width = 800;
 canvas.height = 400;
@@ -53,16 +55,21 @@ let rect1Coordinates = {
   x: 100,
   y: 100,
   height: 200,
-  width: 200,
+  width: 5,
 };
 
-let rect2Coordinates = {};
+let rect2Coordinates = {
+  x: rect1Coordinates.x + 500,
+  y: 100,
+  height: 200,
+  width: 5,
+};
 
 /**
  * draw rectangle
  */
 
-function drawRectangle() {
+function drawRectangle1() {
   ctx.beginPath();
   ctx.rect(
     rect1Coordinates.x,
@@ -74,6 +81,81 @@ function drawRectangle() {
   ctx.lineWidth = 5;
   ctx.stroke();
 }
+
+function drawRectangle2() {
+  ctx.beginPath();
+  ctx.rect(
+    rect2Coordinates.x,
+    rect2Coordinates.y,
+    rect2Coordinates.width,
+    rect2Coordinates.height
+  );
+  ctx.strokeStyle = "white";
+  ctx.lineWidth = 5;
+  ctx.stroke();
+}
+
+let colldiableBall = {
+  x: 200,
+  y: 200,
+  radius: 10,
+  velocity: 10,
+  dx: 10,
+  dy: 10,
+};
+
+function drawCollidableBall() {
+  ctx.beginPath();
+  ctx.arc(
+    colldiableBall.x,
+    colldiableBall.y,
+    colldiableBall.radius,
+    0,
+    Math.PI * 2
+  );
+  ctx.fillStyle = "red";
+  ctx.fill();
+  ctx.closePath();
+}
+
+function drawGreenBall() {}
+
+function moveBall() {
+  // Update ball position
+  colldiableBall.x += colldiableBall.dx;
+  colldiableBall.y += colldiableBall.dy;
+
+  // Detect collision with the left rectangle (rect1)
+  if (
+    colldiableBall.x - colldiableBall.radius <
+      rect1Coordinates.x + rect1Coordinates.width &&
+    colldiableBall.y + colldiableBall.radius > rect1Coordinates.y &&
+    colldiableBall.y - colldiableBall.radius <
+      rect1Coordinates.y + rect1Coordinates.height
+  ) {
+    colldiableBall.dx = -colldiableBall.dx; // Reverse horizontal direction
+  }
+
+  // Detect collision with the right rectangle (rect2)
+  if (
+    colldiableBall.x + colldiableBall.radius > rect2Coordinates.x &&
+    colldiableBall.y + colldiableBall.radius > rect2Coordinates.y &&
+    colldiableBall.y - colldiableBall.radius <
+      rect2Coordinates.y + rect2Coordinates.height
+  ) {
+    colldiableBall.dx = -colldiableBall.dx; // Reverse horizontal direction
+  }
+
+  // Detect collision with the top and bottom canvas edges
+  if (
+    colldiableBall.y - colldiableBall.radius < 0 || // Top edge
+    colldiableBall.y + colldiableBall.radius > canvas.height // Bottom edge
+  ) {
+    colldiableBall.dy = -colldiableBall.dy; // Reverse vertical direction
+  }
+}
+
+// moveBallBtn.addEventListener("click", moveBall, false);
 
 /**
  * physics for balls sliding on ladder ,
@@ -101,7 +183,10 @@ function updatePhysics() {
  */
 function gameLoop() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  drawRectangle();
+  drawRectangle1();
+  drawRectangle2();
+  drawCollidableBall();
+  moveBall();
   // drawLadder();
   // drawBall();
   // updatePhysics();

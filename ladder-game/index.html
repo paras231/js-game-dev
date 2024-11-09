@@ -7,17 +7,37 @@
     <style>
       body {
         background-color: black;
-        #ladder_game_canvas{
+        #ladder_game_canvas {
           border: 2px solid white;
           display: flex;
           justify-content: center;
           align-items: center;
+        }
+        .btn-wrapper{
+          display: flex;
+          margin-top: 20px;
+          gap: 30px;
+        }
+        .btn-wrapper button{
+          padding: 5px;
+          padding-left: 10px;
+          padding-right: 10px;
+          border-radius: 15px;
+          /* color: ; */
+          border: none;
+          outline: none;
+          background: whitesmoke;
+          cursor: pointer;
         }
       }
     </style>
   </head>
   <body>
     <canvas id="ladder_game_canvas" width="500" height="500"></canvas>
-    <script src="game_logic.js"></script>
+    <div class="btn-wrapper">
+      <button id="move_ball">Move Ball</button>
+      <button>Increase Velocity</button>
+    </div>
+    <script type="module" src="game_logic.js"></script>
   </body>
 </html>

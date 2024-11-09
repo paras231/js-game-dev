@@ -1,10 +1,10 @@
 console.log("game logic got connected");
 
-const canvas = document.getElementById("ladder_game_canvas");  
+const canvas = document.getElementById("ladder_game_canvas");
 const ctx = canvas.getContext("2d");
 
 canvas.width = 800;
-canvas.height = 600;
+canvas.height = 400;
 
 let ladderAngle = Math.PI / 6; // will be 30 degree
 
@@ -20,10 +20,10 @@ let ball = {
 
 /**
  * draw ladder
- * uses ball's x and y positions
- * uses horizontal and vertical components
- * x uses cosine and y uses sine
- * calculates x and y positions of ladder with respect to ball
+ * uses ball's x and y positions ,
+ * uses horizontal and vertical components ,
+ * x uses cosine and y uses sine ,
+ * calculates x and y positions of ladder with respect to ball.
  */
 function drawLadder() {
   const ladderLength = 200;
@@ -32,8 +32,8 @@ function drawLadder() {
   ctx.beginPath();
   ctx.moveTo(ball.x, ball.y);
   ctx.lineTo(ladderEndX, ladderEndY);
-  ctx.strokeStyle = "brown"; // Set the color of the ladder
-  ctx.lineWidth = 5; // Set the width of the ladder line
+  ctx.strokeStyle = "brown";
+  ctx.lineWidth = 5;
   ctx.stroke();
 }
 
@@ -50,13 +50,36 @@ function drawBall() {
 }
 
 /**
+ * physics for balls sliding on ladder ,
+ * changes ball's position on x and y coordinates ,
+ * changes ball's velocity
+ */
+
+function updatePhysics() {
+  ball.speedX += gravity * Math.cos(ladderAngle);
+  ball.speedY += gravity * Math.sin(ladderAngle);
+  ball.x += ball.speedX;
+  ball.y = ball.speedY;
+  // Boundary detection
+  if (ball.x + ball.radius > canvas.width || ball.x - ball.radius < 0) {
+    ball.speedX *= -0.9; // reverse direction with some energy loss
+  }
+  if (ball.y + ball.radius > canvas.height || ball.y - ball.radius < 0) {
+    ball.speedY *= -0.9; // reverse direction with some energy loss
+  }
+}
+
+/**
  * game loop that runs and manages the entire game state
  * handles rendering of ladder and sliding the ball on ladder.
  */
 function gameLoop() {
-  // first clear the canvas
+  
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   drawLadder();
   drawBall();
+  updatePhysics();
   requestAnimationFrame(gameLoop);
 }
+
+gameLoop();

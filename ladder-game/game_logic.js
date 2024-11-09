@@ -49,6 +49,32 @@ function drawBall() {
   ctx.closePath();
 }
 
+let rect1Coordinates = {
+  x: 100,
+  y: 100,
+  height: 200,
+  width: 200,
+};
+
+let rect2Coordinates = {};
+
+/**
+ * draw rectangle
+ */
+
+function drawRectangle() {
+  ctx.beginPath();
+  ctx.rect(
+    rect1Coordinates.x,
+    rect1Coordinates.y,
+    rect1Coordinates.width,
+    rect1Coordinates.height
+  );
+  ctx.strokeStyle = "white";
+  ctx.lineWidth = 5;
+  ctx.stroke();
+}
+
 /**
  * physics for balls sliding on ladder ,
  * changes ball's position on x and y coordinates ,
@@ -74,11 +100,11 @@ function updatePhysics() {
  * handles rendering of ladder and sliding the ball on ladder.
  */
 function gameLoop() {
-  
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  drawLadder();
-  drawBall();
-  updatePhysics();
+  drawRectangle();
+  // drawLadder();
+  // drawBall();
+  // updatePhysics();
   requestAnimationFrame(gameLoop);
 }
 
